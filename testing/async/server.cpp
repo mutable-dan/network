@@ -12,33 +12,33 @@ void listener_socketCallbackHandler       ( const network::socketfd_t& a_fd, con
 void listener_socketErrorCallbackHandler  ( const int32_t a_nerrno, const char* a_pszError, void* const a_pData );
 
 
- int main( int, char** )
- {
- 	network::ServerAsync server;
- 	string strHost = "localhost";
- 	string strPort = "5200";
- 	const int32_t nEnventQueueSize = 5;
- 	const int32_t nMaxEpollEvents  = 100;
- 	const int32_t nEpollTimeout_ms = 1000;
- 	
- 	server.setLocalSocketProperties( network::Sockets::getDefaultServerSocketFlags() );
+int main( int, char** )
+{
+   network::ServerAsync server;
+   string strHost = "localhost";
+   string strPort = "5200";
+   const int32_t nEnventQueueSize = 5;
+   const int32_t nMaxEpollEvents  = 100;
+   const int32_t nEpollTimeout_ms = 1000;
+        
+   server.setLocalSocketProperties( network::Sockets::getDefaultServerSocketFlags() );
    server.setListenerBacklog( nEnventQueueSize );
 
-    if( server.open( network::sockType_t::SERVER, network::protocol_t::TCP, strHost, strPort ) )
- 	{
-		server.setMaximumPollEvents( nMaxEpollEvents );
-		server.setEpollWaitTimeout( nEpollTimeout_ms ); 		
-		server.useStackAlloc();
-		// server.useHeapAlloc();
-		server.setNoDelay();
+   if( server.open( network::sockType_t::SERVER, network::protocol_t::TCP, strHost, strPort ) )
+   {
+      server.setMaximumPollEvents( nMaxEpollEvents );
+      server.setEpollWaitTimeout( nEpollTimeout_ms );                 
+      server.useStackAlloc();
+      // server.useHeapAlloc();
+      server.setNoDelay();
 
-        if( false == server.nonblockingListener( listener_socketCallbackHandler, false, listener_socketErrorCallbackHandler, reinterpret_cast<void*>(&server) ) )
-		{
-			std::cout << "error" << std::endl;
-		}
- 	}
- 	return 0;
- }
+      if( false == server.nonblockingListener( listener_socketCallbackHandler, false, listener_socketErrorCallbackHandler, reinterpret_cast<void*>(&server) ) )
+      {
+        std::cout << "error" << std::endl;
+      }
+   }
+   return 0;
+}
 
 
 
@@ -59,12 +59,12 @@ void listener_socketCallbackHandler( const network::socketfd_t& a_fd, const netw
             char* pszCurrentMsg = ucSocketBuffer;
             for( int32_t nIndex=0; nIndex<nRecSize; ++nIndex )
             {
-            	if( ucSocketBuffer[nIndex] == 0 )
-            	{
-                    auto res = pServer->send( a_fd, pszCurrentMsg, static_cast<ssize_t>(strlen( pszCurrentMsg ) + 1 ));
-		            cout << "reply[" << res << "]:" << ucSocketBuffer << endl;
-		            pszCurrentMsg = ucSocketBuffer + nIndex + 1;
-            	}
+                if( ucSocketBuffer[nIndex] == 0 )
+                {
+                   auto res = pServer->send( a_fd, pszCurrentMsg, static_cast<ssize_t>(strlen( pszCurrentMsg ) + 1 ));
+                   cout << "reply[" << res << "]:" << ucSocketBuffer << endl;
+                   pszCurrentMsg = ucSocketBuffer + nIndex + 1;
+                }
             }
          }
          break;
