@@ -107,7 +107,7 @@ bool network::Sockets::isNonBlocking(network::socketfd_t& a_fd)
 
 
 /**
- * @brief ...no nageling so packets are sent right away inproving larency
+ * @brief ...no nageling so packets are sent right away inproving latency
  * @details see https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_MRG/1.2/html/Realtime_Tuning_Guide/sect-Realtime_Tuning_Guide-Application_Tuning_and_Deployment-TCP_NODELAY_and_Small_Buffer_Writes.html
  * For this to be used effectively, applications must avoid doing small, logically related buffer writes. Because TCP_NODELAY is enabled, these small writes will make TCP send these multiple buffers as individual packets, which can result in poor overall performance.
  * I f applications have several buffers that are logically related and that should be sent as one packet it could be po*ssible to build a contiguous packet in memory and then send the logical packet to TCP, on a socket configured with TCP_NODELAY.
@@ -332,7 +332,7 @@ ssize_t network::Sockets::receive( const socketfd_t& a_fd, void* a_pBuffer, cons
  * 
  * @param a_fd ...
  * @param a_pBuffer ...buffer to hold data
- * @param a_nBufferSize ...size of your buffer (note this is no a null term string)
+ * @param a_nBufferSize ...size of your buffer (note this is not a null term string)
  * @return ssize_t
  */
 ssize_t network::Sockets::receive_blocking( const socketfd_t& a_fd, void* a_pBuffer, const ssize_t& a_nBufferSize )
